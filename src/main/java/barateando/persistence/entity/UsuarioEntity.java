@@ -1,6 +1,7 @@
 package barateando.persistence.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class UsuarioEntity {
     private String email;
 
     @ManyToMany(mappedBy = "participantes")
+    @JsonIgnore
     private List<ViajeEntity> viajes = new ArrayList<>();
 
 

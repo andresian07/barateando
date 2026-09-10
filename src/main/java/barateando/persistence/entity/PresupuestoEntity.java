@@ -24,7 +24,8 @@ public class PresupuestoEntity {
     private BigDecimal montoPresupuesto;
 
     @OneToOne
-    @JoinColumn(name = "id_viaje", unique = true)
+    @JoinColumn(name = "id_viaje", unique = true
+        )
     private ViajeEntity viaje;
 
 }

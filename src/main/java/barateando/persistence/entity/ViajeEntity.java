@@ -47,6 +47,7 @@ public class ViajeEntity {
             inverseJoinColumns = @JoinColumn(name = "id_usuario")
     )
     // aqui se trae algo asi como la lista de usuarios que pertenecen a ese viaje
+
     private List<UsuarioEntity> participantes = new ArrayList<>();
 
 
