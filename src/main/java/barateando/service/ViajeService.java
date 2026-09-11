@@ -1,10 +1,16 @@
 package barateando.service;
 
+import barateando.persistence.entity.GastoEntity;
+import barateando.persistence.entity.PresupuestoEntity;
 import barateando.persistence.entity.ViajeEntity;
+import barateando.persistence.repository.GastoRepository;
+import barateando.persistence.repository.PresupuestoRepository;
 import barateando.persistence.repository.ViajeRepository;
+import barateando.web.ResumenViaje;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +18,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ViajeService {
     private final ViajeRepository viajeRepository;
+    private final PresupuestoRepository presupuestoRepository;
+    private final GastoRepository gastoRepository;
 
     public ViajeEntity crear (ViajeEntity viaje){
         return this.viajeRepository.save(viaje);
@@ -53,6 +61,18 @@ public class ViajeService {
          viajeRepository.deleteById(id);
     }
 
+    public ResumenViaje getResumen(Long viajeId){
+        BigDecimal presupuesto = presupuestoRepository.findByViaje_Id(viajeId)
+                .map(PresupuestoEntity::getMontoPresupuesto)
+                .orElse(BigDecimal.ZERO);
 
+        BigDecimal totalGastado = gastoRepository.findByViaje_Id(viajeId).stream()
+                .map(GastoEntity::getMonto)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal diferencia = presupuesto.subtract(totalGastado);
+
+        return new ResumenViaje(presupuesto, totalGastado, diferencia);
+    }
 
 }

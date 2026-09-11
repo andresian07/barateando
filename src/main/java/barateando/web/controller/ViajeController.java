@@ -2,6 +2,7 @@ package barateando.web.controller;
 
 import barateando.persistence.entity.ViajeEntity;
 import barateando.service.ViajeService;
+import barateando.web.ResumenViaje;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,11 @@ public class ViajeController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         this.viajeService.delete(id);
+    }
+
+    @GetMapping("/{id}/resumen")
+    public ResumenViaje getResumen(@PathVariable Long id){
+        return this.viajeService.getResumen(id);
     }
 
 }
