@@ -1,4 +1,4 @@
-package barateando.web;
+package barateando.web.dto;
 
 import java.math.BigDecimal;
 

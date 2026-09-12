@@ -2,7 +2,8 @@ package barateando.web.controller;
 
 import barateando.persistence.entity.ViajeEntity;
 import barateando.service.ViajeService;
-import barateando.web.ResumenViaje;
+import barateando.web.dto.GastoDto;
+import barateando.web.dto.ResumenViaje;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,11 @@ public class ViajeController {
     @GetMapping("/{id}/resumen")
     public ResumenViaje getResumen(@PathVariable Long id){
         return this.viajeService.getResumen(id);
+    }
+
+    @GetMapping("/{id}/gastos")
+    public List<GastoDto> gastoPorViaje(@PathVariable Long id){
+        return this.viajeService.getGastosPorViaje(id);
     }
 
 }

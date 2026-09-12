@@ -6,7 +6,8 @@ import barateando.persistence.entity.ViajeEntity;
 import barateando.persistence.repository.GastoRepository;
 import barateando.persistence.repository.PresupuestoRepository;
 import barateando.persistence.repository.ViajeRepository;
-import barateando.web.ResumenViaje;
+import barateando.web.dto.GastoDto;
+import barateando.web.dto.ResumenViaje;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +74,16 @@ public class ViajeService {
         BigDecimal diferencia = presupuesto.subtract(totalGastado);
 
         return new ResumenViaje(presupuesto, totalGastado, diferencia);
+    }
+
+    public List<GastoDto> getGastosPorViaje(Long viajeId){
+        return gastoRepository.findByViaje_Id(viajeId).stream().map(g -> new GastoDto(
+                g.getId(),
+                g.getMonto(),
+                g.getDescripcion(),
+                g.getFechaGasto(),
+                g.getUsuario().getNombre()
+        )).toList();
     }
 
 }
