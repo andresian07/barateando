@@ -2,9 +2,11 @@ package barateando.service;
 
 import barateando.persistence.entity.GastoEntity;
 import barateando.persistence.entity.PresupuestoEntity;
+import barateando.persistence.entity.UsuarioEntity;
 import barateando.persistence.entity.ViajeEntity;
 import barateando.persistence.repository.GastoRepository;
 import barateando.persistence.repository.PresupuestoRepository;
+import barateando.persistence.repository.UsuarioRepository;
 import barateando.persistence.repository.ViajeRepository;
 import barateando.web.dto.GastoDto;
 import barateando.web.dto.ResumenViaje;
@@ -21,6 +23,7 @@ public class ViajeService {
     private final ViajeRepository viajeRepository;
     private final PresupuestoRepository presupuestoRepository;
     private final GastoRepository gastoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public ViajeEntity crear (ViajeEntity viaje){
         return this.viajeRepository.save(viaje);
@@ -86,4 +89,14 @@ public class ViajeService {
         )).toList();
     }
 
+
+    public ViajeEntity agregarParticipante(Long viajeId, Long usuarioId){
+        ViajeEntity viaje = this.viajeRepository.findById(viajeId)
+                .orElseThrow(() -> new IllegalArgumentException("el viaje no se encuentra: " + viajeId));
+        UsuarioEntity usuario = this.usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("el usuario no se encuntra: " + usuarioId));
+        viaje.getParticipantes().add(usuario);
+
+        return this.viajeRepository.save(viaje);
+    }
 }

@@ -30,10 +30,16 @@ public class ViajeController {
         return this.viajeService.crear(viaje);
     }
 
+    @PostMapping("/{viajeId}/participantes/{usuarioId}")
+    public ViajeEntity agregarParticipante(@PathVariable Long viajeId,@PathVariable Long usuarioId){
+        return this.viajeService.agregarParticipante(viajeId,usuarioId);
+    }
+
     @PutMapping("/{id}")
     public ViajeEntity update(@PathVariable Long id, @RequestBody ViajeEntity viaje){
         return this.viajeService.update(id,viaje);
     }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
