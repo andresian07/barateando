@@ -4,6 +4,7 @@ import barateando.persistence.entity.ViajeEntity;
 import barateando.service.ViajeService;
 import barateando.web.dto.GastoDto;
 import barateando.web.dto.ResumenViaje;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ViajeController {
     }
 
     @PostMapping
-    public ViajeEntity create(@RequestBody ViajeEntity viaje){
+    public ViajeEntity create(@Valid @RequestBody ViajeEntity viaje){
         return this.viajeService.crear(viaje);
     }
 
@@ -39,6 +40,7 @@ public class ViajeController {
     public ViajeEntity update(@PathVariable Long id, @RequestBody ViajeEntity viaje){
         return this.viajeService.update(id,viaje);
     }
+
 
 
     @DeleteMapping("/{id}")

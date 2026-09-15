@@ -1,6 +1,7 @@
 package barateando.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class PresupuestoEntity {
     private Long id;
 
     @Column(name = "monto_presupuesto")
+    @Positive
     private BigDecimal montoPresupuesto;
 
     @OneToOne

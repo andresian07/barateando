@@ -1,6 +1,9 @@
 package barateando.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +25,13 @@ public class GastoEntity {
     private Long id;
 
     @Column(name = "monto", nullable = false)
-    private BigDecimal monto;
+    @Positive private BigDecimal monto;
 
     @Column(name = "descripcion", nullable = false, length = 120)
-    private String descripcion;
+    @NotBlank private String descripcion;
 
     @Column(name = "fecha_gasto")
+    @PastOrPresent
     private LocalDate fechaGasto;
 
     @ManyToOne

@@ -2,6 +2,7 @@ package barateando.web.controller;
 
 import barateando.persistence.entity.PresupuestoEntity;
 import barateando.service.PresupuestoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class PresupuestoController {
     }
 
     @PostMapping
-    public PresupuestoEntity crear(@RequestBody PresupuestoEntity presupuesto){
+    public PresupuestoEntity crear(@Valid @RequestBody PresupuestoEntity presupuesto){
         return this.presupuestoService.crear(presupuesto);
     }
 

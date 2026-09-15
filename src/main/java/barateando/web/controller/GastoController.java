@@ -2,6 +2,7 @@ package barateando.web.controller;
 
 import barateando.persistence.entity.GastoEntity;
 import barateando.service.GastoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class GastoController {
     }
 
     @PostMapping
-    public GastoEntity create(@RequestBody GastoEntity gasto){
+    public GastoEntity create(@Valid @RequestBody GastoEntity gasto){
         return this.gastoService.create(gasto);
     }
 
