@@ -2,6 +2,7 @@ package barateando.web.controller;
 
 import barateando.persistence.entity.UsuarioEntity;
 import barateando.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public UsuarioEntity create(@RequestBody UsuarioEntity usuario){
+    public UsuarioEntity create(@Valid @RequestBody UsuarioEntity usuario){
         return this.usuarioService.crear(usuario);
     }
 

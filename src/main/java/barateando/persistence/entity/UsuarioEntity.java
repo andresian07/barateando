@@ -3,6 +3,8 @@ package barateando.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +26,11 @@ public class UsuarioEntity {
     private Long id;
 
     @Column(name = "nombre", nullable = false, length = 120)
+    @NotBlank
     private String nombre;
 
     @Column(name = "email", nullable = false, length = 120)
-    private String email;
+    @NotBlank @Email private String email;
 
     @ManyToMany(mappedBy = "participantes")
     @JsonIgnore
