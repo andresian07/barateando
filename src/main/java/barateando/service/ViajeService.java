@@ -1,5 +1,7 @@
 package barateando.service;
 
+import barateando.web.exception.RecursoNoEncontradoException;
+
 import barateando.persistence.entity.GastoEntity;
 import barateando.persistence.entity.PresupuestoEntity;
 import barateando.persistence.entity.UsuarioEntity;
@@ -41,7 +43,7 @@ public class ViajeService {
 
     public ViajeDto get(Long id){
         ViajeEntity viaje = viajeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Viaje no encontrado: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Viaje no encontrado: " + id));
         return toDto(viaje);
     }
 
@@ -51,7 +53,7 @@ public class ViajeService {
 
     public ViajeDto update(Long id, ViajeUpdate viaje){
         ViajeEntity viajeEntity = this.viajeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("el viaje no se encontro: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("el viaje no se encontro: " + id));
 
         if(viaje.nombre() != null){
             viajeEntity.setNombre(viaje.nombre());
@@ -75,7 +77,7 @@ public class ViajeService {
 
     public void delete(Long id){
         if (!viajeRepository.existsById(id)){
-            throw new IllegalArgumentException("el viaje no se encontro: " + id);
+            throw new RecursoNoEncontradoException("el viaje no se encontro: " + id);
         }
         viajeRepository.deleteById(id);
     }
@@ -107,9 +109,9 @@ public class ViajeService {
 
     public ViajeDto agregarParticipante(Long viajeId, Long usuarioId){
         ViajeEntity viaje = this.viajeRepository.findById(viajeId)
-                .orElseThrow(() -> new IllegalArgumentException("el viaje no se encuentra: " + viajeId));
+                .orElseThrow(() -> new RecursoNoEncontradoException("el viaje no se encuentra: " + viajeId));
         UsuarioEntity usuario = this.usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("el usuario no se encuntra: " + usuarioId));
+                .orElseThrow(() -> new RecursoNoEncontradoException("el usuario no se encuntra: " + usuarioId));
         viaje.getParticipantes().add(usuario);
 
         this.viajeRepository.save(viaje);

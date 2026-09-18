@@ -1,5 +1,7 @@
 package barateando.service;
 
+import barateando.web.exception.RecursoNoEncontradoException;
+
 import barateando.persistence.entity.PresupuestoEntity;
 import barateando.persistence.entity.ViajeEntity;
 import barateando.persistence.repository.PresupuestoRepository;
@@ -20,7 +22,7 @@ public class PresupuestoService {
 
     public PresupuestoDto get(Long id){
         PresupuestoEntity presupuesto = this.presupuestoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Presupuesto no encontrado: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Presupuesto no encontrado: " + id));
         return toDto(presupuesto);
     }
 
@@ -30,7 +32,7 @@ public class PresupuestoService {
 
     public PresupuestoDto crear(PresupuestoRequest request){
         ViajeEntity viaje = this.viajeRepository.findById(request.idViaje())
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el viaje: " + request.idViaje()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el viaje: " + request.idViaje()));
         PresupuestoEntity newPresupuesto = new PresupuestoEntity();
         newPresupuesto.setMontoPresupuesto(request.montoPresupuesto());
         newPresupuesto.setViaje(viaje);
@@ -41,7 +43,7 @@ public class PresupuestoService {
 
     public PresupuestoDto update(Long id, PresupuestoUpdate presupuesto){
         PresupuestoEntity existente = presupuestoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el presupuesto: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el presupuesto: " + id));
         if (presupuesto.montoPresupuesto() != null){
             existente.setMontoPresupuesto(presupuesto.montoPresupuesto());
         }
@@ -53,7 +55,7 @@ public class PresupuestoService {
 
     public void delete(Long id){
         if (!this.presupuestoRepository.existsById(id)){
-            throw new IllegalArgumentException("no se encontro el presupuesto: " + id);
+            throw new RecursoNoEncontradoException("no se encontro el presupuesto: " + id);
         }
         this.presupuestoRepository.deleteById(id);
     }

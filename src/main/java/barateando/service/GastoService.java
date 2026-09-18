@@ -1,5 +1,7 @@
 package barateando.service;
 
+import barateando.web.exception.RecursoNoEncontradoException;
+
 import barateando.persistence.entity.GastoEntity;
 import barateando.persistence.entity.UsuarioEntity;
 import barateando.persistence.entity.ViajeEntity;
@@ -23,7 +25,7 @@ public class GastoService {
 
     public GastoDto get(Long id){
         GastoEntity gasto = this.gastoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el gasto: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el gasto: " + id));
         return toDto(gasto);
     }
 
@@ -36,9 +38,9 @@ public class GastoService {
 
     public GastoDto create(GastoRequest request){
         UsuarioEntity usuario = this.usuarioRepository.findById(request.idUsuario())
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el usuario: " + request.idUsuario()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el usuario: " + request.idUsuario()));
         ViajeEntity viaje = this.viajeRepository.findById(request.idViaje())
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el viaje: " + request.idViaje()));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el viaje: " + request.idViaje()));
 
         GastoEntity newGasto = new GastoEntity();
         newGasto.setMonto(request.monto());
@@ -56,7 +58,7 @@ public class GastoService {
 
     public GastoDto update(Long id, GastoUpdate gasto){
         GastoEntity existente = gastoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("no se encontro el gasto: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("no se encontro el gasto: " + id));
 
         if (gasto.monto() != null){
             existente.setMonto(gasto.monto());
@@ -76,7 +78,7 @@ public class GastoService {
 
     public void delete(Long id){
         if (!gastoRepository.existsById(id)){
-            throw new IllegalArgumentException("no se encontro el gasto: " + id);
+            throw new RecursoNoEncontradoException("no se encontro el gasto: " + id);
         }
         this.gastoRepository.deleteById(id);
     }

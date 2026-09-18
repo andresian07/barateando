@@ -1,5 +1,7 @@
 package barateando.service;
 
+import barateando.web.exception.RecursoNoEncontradoException;
+
 import barateando.persistence.entity.UsuarioEntity;
 import barateando.persistence.repository.UsuarioRepository;
 import barateando.web.dto.UsuarioDto;
@@ -26,7 +28,7 @@ public class UsuarioService {
 
     public UsuarioDto buscarPorId(Long id) {
         UsuarioEntity usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado: " + id));
         return toDto(usuario);
     }
 
@@ -36,7 +38,7 @@ public class UsuarioService {
 
     public UsuarioDto update(Long id, UsuarioUpdate usuario) {
         UsuarioEntity existente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + id));
+                .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado: " + id));
 
         if (usuario.nombre() != null) {
             existente.setNombre(usuario.nombre());
@@ -52,7 +54,7 @@ public class UsuarioService {
 
     public void eliminar(Long id) {
         if (!usuarioRepository.existsById(id)){
-            throw new IllegalArgumentException("Usuario no encontrado: " + id);
+            throw new RecursoNoEncontradoException("Usuario no encontrado: " + id);
         }
         usuarioRepository.deleteById(id);
     }
