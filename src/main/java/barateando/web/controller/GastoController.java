@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/barateando/gasto")
+@RequestMapping("/barateando/gastos")
 public class GastoController {
     private final GastoService gastoService;
 

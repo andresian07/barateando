@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/barateando/presupuesto")
+@RequestMapping("/barateando/presupuestos")
 @RequiredArgsConstructor
 public class PresupuestoController {
     private final PresupuestoService presupuestoService;
