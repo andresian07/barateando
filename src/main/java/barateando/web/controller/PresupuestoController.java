@@ -32,7 +32,7 @@ public class PresupuestoController {
     }
 
     @PutMapping("/{id}")
-    public PresupuestoDto update(@PathVariable Long id, @RequestBody PresupuestoUpdate presupuesto ){
+    public PresupuestoDto update(@PathVariable Long id, @Valid @RequestBody PresupuestoUpdate presupuesto ){
         return this.presupuestoService.update(id, presupuesto);
     }
 

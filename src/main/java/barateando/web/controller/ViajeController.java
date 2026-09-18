@@ -39,7 +39,7 @@ public class ViajeController {
     }
 
     @PutMapping("/{id}")
-    public ViajeDto update(@PathVariable Long id, @RequestBody ViajeUpdate viaje){
+    public ViajeDto update(@PathVariable Long id, @Valid @RequestBody ViajeUpdate viaje){
         return this.viajeService.update(id,viaje);
     }
 

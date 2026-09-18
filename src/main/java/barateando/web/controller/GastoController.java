@@ -32,7 +32,7 @@ public class GastoController {
     }
 
     @PutMapping("/{id}")
-    public GastoDto update(@PathVariable Long id, @RequestBody GastoUpdate update){
+    public GastoDto update(@PathVariable Long id, @Valid @RequestBody GastoUpdate update){
         return this.gastoService.update(id, update);
     }
 

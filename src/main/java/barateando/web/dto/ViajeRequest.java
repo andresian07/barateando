@@ -3,16 +3,18 @@ package barateando.web.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public record ViajeRequest(
-        @NotBlank
+        @NotBlank @Size(max = 120)
         String nombre,
-        @NotBlank
+        @NotBlank @Size(max = 120)
         String destino,
-        @FutureOrPresent
+        @FutureOrPresent @NotNull
         LocalDate fechaInicio,
-        @Future
+        @Future @NotNull
         LocalDate fechaFin
 ) { }

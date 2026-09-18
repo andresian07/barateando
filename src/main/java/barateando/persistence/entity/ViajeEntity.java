@@ -29,10 +29,10 @@ public class ViajeEntity {
     @Column(name = "destino", nullable = false, length = 120)
     private String destino;
 
-    @Column(name = "fecha_inicio")
+    @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fechaInicio;
 
-    @Column(name = "fecha_fin")
+    @Column(name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
 
     // anotacion para saber que es una union de muchos a muchos
