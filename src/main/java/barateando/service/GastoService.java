@@ -75,6 +75,9 @@ public class GastoService {
     }
 
     public void delete(Long id){
+        if (!gastoRepository.existsById(id)){
+            throw new IllegalArgumentException("no se encontro el gasto: " + id);
+        }
         this.gastoRepository.deleteById(id);
     }
 

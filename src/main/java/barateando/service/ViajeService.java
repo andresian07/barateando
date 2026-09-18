@@ -74,7 +74,10 @@ public class ViajeService {
     }
 
     public void delete(Long id){
-         viajeRepository.deleteById(id);
+        if (!viajeRepository.existsById(id)){
+            throw new IllegalArgumentException("el viaje no se encontro: " + id);
+        }
+        viajeRepository.deleteById(id);
     }
 
     public ResumenViaje getResumen(Long viajeId){

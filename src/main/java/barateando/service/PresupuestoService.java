@@ -52,6 +52,9 @@ public class PresupuestoService {
     }
 
     public void delete(Long id){
+        if (!this.presupuestoRepository.existsById(id)){
+            throw new IllegalArgumentException("no se encontro el presupuesto: " + id);
+        }
         this.presupuestoRepository.deleteById(id);
     }
 
