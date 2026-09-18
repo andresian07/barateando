@@ -1,7 +1,9 @@
 package barateando.web.controller;
 
-import barateando.persistence.entity.GastoEntity;
 import barateando.service.GastoService;
+import barateando.web.dto.GastoDto;
+import barateando.web.dto.GastoRequest;
+import barateando.web.dto.GastoUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +17,23 @@ public class GastoController {
     private final GastoService gastoService;
 
     @GetMapping("/{id}")
-    public GastoEntity get(@PathVariable Long id){
+    public GastoDto get(@PathVariable Long id){
         return this.gastoService.get(id);
     }
 
     @GetMapping
-    public List<GastoEntity> getAll(){
+    public List<GastoDto> getAll(){
         return this.gastoService.getAll();
     }
 
     @PostMapping
-    public GastoEntity create(@Valid @RequestBody GastoEntity gasto){
-        return this.gastoService.create(gasto);
+    public GastoDto create(@Valid @RequestBody GastoRequest request){
+        return this.gastoService.create(request);
     }
 
     @PutMapping("/{id}")
-    public GastoEntity update(@PathVariable Long id, @RequestBody GastoEntity gasto){
-        return this.gastoService.update(id, gasto);
+    public GastoDto update(@PathVariable Long id, @RequestBody GastoUpdate update){
+        return this.gastoService.update(id, update);
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,9 @@
 package barateando.web.controller;
 
-import barateando.persistence.entity.PresupuestoEntity;
 import barateando.service.PresupuestoService;
+import barateando.web.dto.PresupuestoDto;
+import barateando.web.dto.PresupuestoRequest;
+import barateando.web.dto.PresupuestoUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +17,22 @@ public class PresupuestoController {
     private final PresupuestoService presupuestoService;
 
     @GetMapping("/{id}")
-    public PresupuestoEntity get(@PathVariable Long id){
+    public PresupuestoDto get(@PathVariable Long id){
         return this.presupuestoService.get(id);
     }
 
     @GetMapping
-    public List<PresupuestoEntity> getAll(){
+    public List<PresupuestoDto> getAll(){
         return this.presupuestoService.getAll();
     }
 
     @PostMapping
-    public PresupuestoEntity crear(@Valid @RequestBody PresupuestoEntity presupuesto){
+    public PresupuestoDto crear(@Valid @RequestBody PresupuestoRequest presupuesto){
         return this.presupuestoService.crear(presupuesto);
     }
 
     @PutMapping("/{id}")
-    public PresupuestoEntity update(@PathVariable Long id, @RequestBody PresupuestoEntity presupuesto ){
+    public PresupuestoDto update(@PathVariable Long id, @RequestBody PresupuestoUpdate presupuesto ){
         return this.presupuestoService.update(id, presupuesto);
     }
 

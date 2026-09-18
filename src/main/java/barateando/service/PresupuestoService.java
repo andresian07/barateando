@@ -3,6 +3,10 @@ package barateando.service;
 import barateando.persistence.entity.PresupuestoEntity;
 import barateando.persistence.entity.ViajeEntity;
 import barateando.persistence.repository.PresupuestoRepository;
+import barateando.persistence.repository.ViajeRepository;
+import barateando.web.dto.PresupuestoDto;
+import barateando.web.dto.PresupuestoRequest;
+import barateando.web.dto.PresupuestoUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,33 +16,51 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PresupuestoService {
     private final PresupuestoRepository presupuestoRepository;
+    private final ViajeRepository viajeRepository;
 
-    public PresupuestoEntity get(Long id){
-        return this.presupuestoRepository.findById(id)
+    public PresupuestoDto get(Long id){
+        PresupuestoEntity presupuesto = this.presupuestoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Presupuesto no encontrado: " + id));
+        return toDto(presupuesto);
     }
 
-    public List<PresupuestoEntity> getAll(){
-        return this.presupuestoRepository.findAll();
+    public List<PresupuestoDto> getAll(){
+        return this.presupuestoRepository.findAll().stream().map(this::toDto).toList();
     }
 
-    public PresupuestoEntity crear(PresupuestoEntity presupuestoEntity){
-        return this.presupuestoRepository.save(presupuestoEntity);
+    public PresupuestoDto crear(PresupuestoRequest request){
+        ViajeEntity viaje = this.viajeRepository.findById(request.idViaje())
+                .orElseThrow(() -> new IllegalArgumentException("no se encontro el viaje: " + request.idViaje()));
+        PresupuestoEntity newPresupuesto = new PresupuestoEntity();
+        newPresupuesto.setMontoPresupuesto(request.montoPresupuesto());
+        newPresupuesto.setViaje(viaje);
+        this.presupuestoRepository.save(newPresupuesto);
+        return toDto(newPresupuesto);
+
     }
 
-    public PresupuestoEntity update(Long id, PresupuestoEntity presupuesto){
+    public PresupuestoDto update(Long id, PresupuestoUpdate presupuesto){
         PresupuestoEntity existente = presupuestoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("no se encontro el presupuesto: " + id));
-        if (presupuesto.getMontoPresupuesto() != null){
-            existente.setMontoPresupuesto(presupuesto.getMontoPresupuesto());
+        if (presupuesto.montoPresupuesto() != null){
+            existente.setMontoPresupuesto(presupuesto.montoPresupuesto());
         }
-        return this.presupuestoRepository.save(existente);
+        this.presupuestoRepository.save(existente);
+        return toDto(existente);
 
 
     }
 
     public void delete(Long id){
         this.presupuestoRepository.deleteById(id);
+    }
+
+    public PresupuestoDto toDto(PresupuestoEntity presupuesto){
+        return new PresupuestoDto(
+                presupuesto.getId(),
+                presupuesto.getMontoPresupuesto(),
+                presupuesto.getViaje().getId()
+        );
     }
 
 }

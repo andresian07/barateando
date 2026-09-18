@@ -2,6 +2,9 @@ package barateando.service;
 
 import barateando.persistence.entity.UsuarioEntity;
 import barateando.persistence.repository.UsuarioRepository;
+import barateando.web.dto.UsuarioDto;
+import barateando.web.dto.UsuarioRequest;
+import barateando.web.dto.UsuarioUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,35 +16,49 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioEntity crear(UsuarioEntity usuario) {
-        return usuarioRepository.save(usuario);
+    public UsuarioDto crear(UsuarioRequest usuario) {
+        UsuarioEntity newUsuario = new UsuarioEntity();
+        newUsuario.setNombre(usuario.nombre());
+        newUsuario.setEmail(usuario.email());
+        this.usuarioRepository.save(newUsuario);
+        return toDto(newUsuario);
     }
 
-    public UsuarioEntity buscarPorId(Long id) {
-        return usuarioRepository.findById(id)
+    public UsuarioDto buscarPorId(Long id) {
+        UsuarioEntity usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + id));
+        return toDto(usuario);
     }
 
-    public List<UsuarioEntity> listar() {
-        return usuarioRepository.findAll();
+    public List<UsuarioDto> listar() {
+        return usuarioRepository.findAll().stream().map(this::toDto).toList();
     }
 
-    public UsuarioEntity update(Long id, UsuarioEntity usuario) {
+    public UsuarioDto update(Long id, UsuarioUpdate usuario) {
         UsuarioEntity existente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + id));
 
-        if (usuario.getNombre() != null) {
-            existente.setNombre(usuario.getNombre());
+        if (usuario.nombre() != null) {
+            existente.setNombre(usuario.nombre());
         }
 
-        if (usuario.getEmail() != null) {
-            existente.setEmail(usuario.getEmail());
+        if (usuario.email() != null) {
+            existente.setEmail(usuario.email());
         }
 
-        return usuarioRepository.save(existente);
+        this.usuarioRepository.save(existente);
+        return toDto(existente);
     }
 
     public void eliminar(Long id) {
         usuarioRepository.deleteById(id);
+    }
+
+    private UsuarioDto toDto(UsuarioEntity usuario){
+        return new UsuarioDto(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getEmail()
+        );
     }
 }
