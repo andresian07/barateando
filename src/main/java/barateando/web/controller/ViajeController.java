@@ -1,9 +1,11 @@
 package barateando.web.controller;
 
-import barateando.persistence.entity.ViajeEntity;
 import barateando.service.ViajeService;
 import barateando.web.dto.GastoDto;
 import barateando.web.dto.ResumenViaje;
+import barateando.web.dto.ViajeDto;
+import barateando.web.dto.ViajeRequest;
+import barateando.web.dto.ViajeUpdate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,27 +19,27 @@ public class ViajeController {
     private final ViajeService viajeService;
 
     @GetMapping("/{id}")
-    public ViajeEntity get(@PathVariable Long id){
+    public ViajeDto get(@PathVariable Long id){
         return this.viajeService.get(id);
     }
 
     @GetMapping
-    public List<ViajeEntity> getAll(){
+    public List<ViajeDto> getAll(){
         return this.viajeService.getAll();
     }
 
     @PostMapping
-    public ViajeEntity create(@Valid @RequestBody ViajeEntity viaje){
+    public ViajeDto create(@Valid @RequestBody ViajeRequest viaje){
         return this.viajeService.crear(viaje);
     }
 
     @PostMapping("/{viajeId}/participantes/{usuarioId}")
-    public ViajeEntity agregarParticipante(@PathVariable Long viajeId,@PathVariable Long usuarioId){
+    public ViajeDto agregarParticipante(@PathVariable Long viajeId,@PathVariable Long usuarioId){
         return this.viajeService.agregarParticipante(viajeId,usuarioId);
     }
 
     @PutMapping("/{id}")
-    public ViajeEntity update(@PathVariable Long id, @RequestBody ViajeEntity viaje){
+    public ViajeDto update(@PathVariable Long id, @RequestBody ViajeUpdate viaje){
         return this.viajeService.update(id,viaje);
     }
 

@@ -2,9 +2,6 @@ package barateando.persistence.entity;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,17 +24,15 @@ public class ViajeEntity {
     private Long id;
 
     @Column(name = "nombre", nullable = false, length = 120)
-    @NotBlank
     private String nombre;
 
     @Column(name = "destino", nullable = false, length = 120)
-    @NotBlank private String destino;
+    private String destino;
 
     @Column(name = "fecha_inicio")
-    @FutureOrPresent private LocalDate fechaInicio;
+    private LocalDate fechaInicio;
 
     @Column(name = "fecha_fin")
-    @Future
     private LocalDate fechaFin;
 
     // anotacion para saber que es una union de muchos a muchos

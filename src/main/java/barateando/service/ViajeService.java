@@ -10,12 +10,15 @@ import barateando.persistence.repository.UsuarioRepository;
 import barateando.persistence.repository.ViajeRepository;
 import barateando.web.dto.GastoDto;
 import barateando.web.dto.ResumenViaje;
+import barateando.web.dto.UsuarioDto;
+import barateando.web.dto.ViajeDto;
+import barateando.web.dto.ViajeRequest;
+import barateando.web.dto.ViajeUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,40 +28,49 @@ public class ViajeService {
     private final GastoRepository gastoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public ViajeEntity crear (ViajeEntity viaje){
-        return this.viajeRepository.save(viaje);
+    public ViajeDto crear(ViajeRequest request){
+        ViajeEntity newViaje = new ViajeEntity();
+        newViaje.setNombre(request.nombre());
+        newViaje.setDestino(request.destino());
+        newViaje.setFechaInicio(request.fechaInicio());
+        newViaje.setFechaFin(request.fechaFin());
+
+        this.viajeRepository.save(newViaje);
+        return toDto(newViaje);
     }
 
-    public ViajeEntity get(Long id){
-        return viajeRepository.findById(id)
+    public ViajeDto get(Long id){
+        ViajeEntity viaje = viajeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Viaje no encontrado: " + id));
+        return toDto(viaje);
     }
 
-    public List<ViajeEntity> getAll(){
-        return this.viajeRepository.findAll();
+    public List<ViajeDto> getAll(){
+        return this.viajeRepository.findAll().stream().map(this::toDto).toList();
     }
 
-    public ViajeEntity update(Long id, ViajeEntity viaje){
-        Optional<ViajeEntity> optionalViaje = this.viajeRepository.findById(id);
-        ViajeEntity viajeEntity = optionalViaje.orElseThrow(() -> new IllegalArgumentException("el viaje no se encontro: " + id));
+    public ViajeDto update(Long id, ViajeUpdate viaje){
+        ViajeEntity viajeEntity = this.viajeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("el viaje no se encontro: " + id));
 
-        if(viaje.getNombre() != null){
-            viajeEntity.setNombre(viaje.getNombre());
+        if(viaje.nombre() != null){
+            viajeEntity.setNombre(viaje.nombre());
         }
 
-        if (viaje.getDestino() != null){
-            viajeEntity.setDestino(viaje.getDestino());
+        if (viaje.destino() != null){
+            viajeEntity.setDestino(viaje.destino());
         }
 
-        if(viaje.getFechaInicio() != null){
-            viajeEntity.setFechaInicio(viaje.getFechaInicio());
+        if(viaje.fechaInicio() != null){
+            viajeEntity.setFechaInicio(viaje.fechaInicio());
         }
 
-        if(viaje.getFechaFin() != null){
-            viajeEntity.setFechaFin(viaje.getFechaFin());
+        if(viaje.fechaFin() != null){
+            viajeEntity.setFechaFin(viaje.fechaFin());
         }
 
-        return this.viajeRepository.save(viajeEntity);
+        this.viajeRepository.save(viajeEntity);
+        return toDto(viajeEntity);
     }
 
     public void delete(Long id){
@@ -90,14 +102,30 @@ public class ViajeService {
     }
 
 
-    public ViajeEntity agregarParticipante(Long viajeId, Long usuarioId){
+    public ViajeDto agregarParticipante(Long viajeId, Long usuarioId){
         ViajeEntity viaje = this.viajeRepository.findById(viajeId)
                 .orElseThrow(() -> new IllegalArgumentException("el viaje no se encuentra: " + viajeId));
         UsuarioEntity usuario = this.usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("el usuario no se encuntra: " + usuarioId));
         viaje.getParticipantes().add(usuario);
 
-        return this.viajeRepository.save(viaje);
+        this.viajeRepository.save(viaje);
+        return toDto(viaje);
+    }
+
+    private ViajeDto toDto(ViajeEntity viaje){
+        List<UsuarioDto> participantes = viaje.getParticipantes().stream()
+                .map(u -> new UsuarioDto(u.getId(), u.getNombre(), u.getEmail()))
+                .toList();
+
+        return new ViajeDto(
+                viaje.getId(),
+                viaje.getNombre(),
+                viaje.getDestino(),
+                viaje.getFechaInicio(),
+                viaje.getFechaFin(),
+                participantes
+        );
     }
 
 }
